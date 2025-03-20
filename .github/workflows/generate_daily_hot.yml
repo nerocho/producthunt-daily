@@ -1,0 +1,43 @@
+name: Generate Daily Hot
+
+on:
+  schedule:
+    - cron: "01 7 * * *" # 每天UTC时间早上7:01（北京时间下午3:01自动运行）
+  workflow_dispatch: # 手动触发
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [18.x, 20.x]
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@3
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Generate Json File
+        env:
+          PRODUCTHUNT_DEVELOPER_TOKEN: ${{ secrets.PRODUCTHUNT_DEVELOPER_TOKEN }}
+        run: node index.js
+
+      - name: Commit files
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git add .
+          git commit -m "Generated daily content" || echo "No changes to commit"
+
+      - name: Push changes
+        run: |
+          git push --force https://${{ secrets.PAT }}@github.com/${{ github.repository_owner }}/producthunt-daily.git HEAD:main
