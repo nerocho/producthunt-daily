@@ -55,11 +55,12 @@ async function GetProductHuntDailyHot(d) {
       body: JSON.stringify({ query: query }),
     });
     let data = await response.json();
-    console.log(JSON.stringify(data) + developer_token);
-    posts = posts.concat(data.data.posts);
+    data = data.data;
 
-    hasNextPage = data.pageInfo.hasNextPage;
-    cursor = data.pageInfo.cursor;
+    posts = posts.concat(data.posts.nodes);
+
+    hasNextPage = data.posts.pageInfo.hasNextPage;
+    cursor = data.posts.pageInfo.endCursor;
   }
 
   return posts;
