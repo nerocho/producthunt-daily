@@ -55,6 +55,7 @@ async function GetProductHuntDailyHot(d) {
       body: JSON.stringify({ query: query }),
     });
     let data = await response.json();
+    console.log(developer_token);
     console.log(JSON.stringify(data));
     posts = posts.concat(data.data.posts);
 
