@@ -52,7 +52,7 @@ async function GetProductHuntDailyHot(d) {
     let response = await fetch(url, {
       method: 'POST',
       headers: headers,
-      body: JSON.stringify(query),
+      body: JSON.stringify({ query: query }),
     });
     let data = await response.json();
     console.log(JSON.stringify(data));
