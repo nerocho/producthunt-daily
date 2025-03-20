@@ -19,6 +19,7 @@ async function GetProductHuntDailyHot(d) {
       'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/134.0.0.0 Safari/537.36 Edg/134.0.0.0',
   };
 
+  let cursor = '';
   let query = `
   {
       posts(order: VOTES, postedAfter: "${d}T00:00:00Z", postedBefore: "${d}T23:59:59Z", after: "${cursor}") {
@@ -45,7 +46,6 @@ async function GetProductHuntDailyHot(d) {
       }
     }`;
 
-  let cursor = '';
   let hasNextPage = true;
   let posts = [];
   while (hasNextPage && posts.length < 30) {
