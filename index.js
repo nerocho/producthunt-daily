@@ -9,7 +9,9 @@ const developer_token = process.env.PRODUCTHUNT_DEVELOPER_TOKEN;
 let hotDate = dayjs().subtract(1, 'days').format('YYYY-MM-DD');
 let posts = await GetProductHuntDailyHot(hotDate);
 
-fs.writeFileSync(join(__dirname, `hot/${hotDate}.json`), JSON.stringify(posts));
+let stream = fs.createWriteStream(join(__dirname, `hot/${hotDate}.json`));
+stream.write(JSON.stringify(posts));
+stream.close();
 
 async function GetProductHuntDailyHot(d) {
   let url = 'https://api.producthunt.com/v2/api/graphql';
